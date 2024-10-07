@@ -56,44 +56,49 @@ In summary, **stack** is ideal for scenarios requiring LIFO behavior, while **qu
 #include <iostream>
 using namespace std;
 
-#define MAX 5
+#define MAX 5  // Maximum size of the queue
 
-class Stack {
-    int top;
-    int stack[MAX];
+class Queue {
+    int front, rear;
+    int queue[MAX];
 
 public:
-    Stack() {
-        top = -1;  // Initialize top to -1 (empty stack)
+    // Constructor to initialize front and rear to -1 (empty queue)
+    Queue() {
+        front = rear = -1;
     }
 
-    // Push function to add an element to the stack
-    void push(int value) {
-        if (top == MAX - 1) {
-            cout << "Stack Overflow! Cannot push more elements." << endl;
+    // Enqueue function to add an element to the queue
+    void enqueue(int value) {
+        if (rear == MAX - 1) {
+            cout << "Queue Overflow! Cannot add more elements." << endl;
         } else {
-            stack[++top] = value;
-            cout << value << " pushed onto the stack." << endl;
+            if (front == -1) front = 0;  // First element being added
+            queue[++rear] = value;       // Increment rear and add value
+            cout << value << " enqueued into the queue." << endl;
         }
     }
 
-    // Pop function to remove the top element from the stack
-    void pop() {
-        if (top == -1) {
-            cout << "Stack Underflow! No elements to pop." << endl;
+    // Dequeue function to remove the front element from the queue
+    void dequeue() {
+        if (front == -1 || front > rear) {
+            cout << "Queue Underflow! No elements to dequeue." << endl;
         } else {
-            cout << stack[top--] << " popped from the stack." << endl;
+            cout << queue[front++] << " dequeued from the queue." << endl;
+            if (front > rear) {  // Reset the queue when empty
+                front = rear = -1;
+            }
         }
     }
 
-    // Display function to print all elements in the stack
+    // Display function to print all elements in the queue
     void display() {
-        if (top == -1) {
-            cout << "Stack is empty." << endl;
+        if (front == -1) {
+            cout << "Queue is empty." << endl;
         } else {
-            cout << "Stack elements are: ";
-            for (int i = top; i >= 0; i--) {
-                cout << stack[i] << " ";
+            cout << "Queue elements are: ";
+            for (int i = front; i <= rear; i++) {
+                cout << queue[i] << " ";
             }
             cout << endl;
         }
@@ -101,46 +106,46 @@ public:
 };
 
 int main() {
-    Stack s;
+    Queue q;
     int choice, value;
 
     while (1) {
         // Display the menu options
-        cout << "\nStack Operations Menu:\n";
-        cout << "1. Push\n";
-        cout << "2. Pop\n";
+        cout << "\nQueue Operations Menu:\n";
+        cout << "1. Enqueue\n";
+        cout << "2. Dequeue\n";
         cout << "3. Display\n";
         cout << "4. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
+        // Switch statement to handle the operations
         switch (choice) {
-            case 1:  // Push
-                cout << "Enter the value to push: ";
+            case 1:  // Enqueue operation
+                cout << "Enter the value to enqueue: ";
                 cin >> value;
-                s.push(value);
+                q.enqueue(value);   // Call enqueue function with the input value
                 break;
 
-            case 2:  // Pop
-                s.pop();
+            case 2:  // Dequeue operation
+                q.dequeue();  // Call dequeue function
                 break;
 
-            case 3:  // Display
-                s.display();
+            case 3:  // Display operation
+                q.display();  // Call display function to show elements in the queue
                 break;
 
-            case 4:  // Exit
+            case 4:  // Exit the program
                 cout << "Exiting..." << endl;
                 return 0;
 
-            default:
+            default:  // Handle invalid option
                 cout << "Invalid choice! Please enter a valid option." << endl;
         }
     }
 
     return 0;
 }
-
 ~~~
 
 ## Code output 
